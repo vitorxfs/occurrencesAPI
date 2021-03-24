@@ -1,0 +1,12 @@
+#!/bin/bash
+
+# if [ 1 ]; then
+  CMD="node -r sucrase/register ./node_modules/.bin/sequelize $@"
+# else
+#   CMD="./node_modules/.bin/sequelize $@"
+# fi
+
+DARK_GRAY='\033[1;30m'
+NC='\033[0m' # No Color
+echo -e "${DARK_GRAY}\$ ${CMD}${NC}"
+$CMD

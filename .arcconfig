@@ -1,0 +1,7 @@
+{
+  "project_id": "blank-app",
+  "phabricator.uri": "http://phabricator.onlineapp.com.br",
+  "conduit_uri": "http://phabricator.onlineapp.com.br",
+  "base": "git:merge-base(origin/develop)",
+  "arc.land.onto.default": "develop"
+}
