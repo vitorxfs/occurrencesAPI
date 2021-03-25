@@ -4,7 +4,15 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "dev": "nodemon --exec node --inspect=0.0.0.0 -r sucrase/register ./src/server.ts"
+    "build": "tsc",
+    "db:drop": "npm run sequelize db:drop",
+    "db:migrate": "(npm run sequelize db:create || exit 0) && npm run sequelize db:migrate",
+    "db:rollback-specific": "npm run sequelize db:migrate:undo:all --to",
+    "db:rollback": "npm run sequelize db:migrate:undo",
+    "db:seed": "npm run sequelize db:seed:all",
+    "dev": "nodemon --exec node --inspect=0.0.0.0 -r sucrase/register ./src/server.ts",
+    "jake": "./bin/jake",
+    "sequelize": "./bin/sequelize"
   },
   "dependencies": {
     "@enviabybus/utility-belt": "^1.9.16",

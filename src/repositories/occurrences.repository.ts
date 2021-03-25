@@ -1,13 +1,13 @@
-import { OccurrencesParser } from '../database/parser/occurrences.parser';
 import { Occurrences, OccurrencesAttributes } from '../models/occurrences.model';
 import { Occurrences as OccurrencesDbModel } from '../database/models/occurrences';
+import { OccurrencesParser } from '../database/parser/occurrences.parser';
 
 interface OccurrencesRepositoryDependencies {
   occurrencesParser: OccurrencesParser;
 }
 
 export class OccurrencesRepository {
-  private occurrencesParser: OccurrencesParser;
+  occurrencesParser: OccurrencesParser;
 
   constructor({ occurrencesParser }: OccurrencesRepositoryDependencies) {
     this.occurrencesParser = occurrencesParser;
@@ -20,16 +20,12 @@ export class OccurrencesRepository {
       registeredAt,
     } = occurrence;
 
-    try {
-      const createdOccurrence = await OccurrencesDbModel.create({
-        description,
-        code,
-        registeredAt,
-      });
+    const createdOccurrence = await OccurrencesDbModel.create({
+      description,
+      code,
+      registeredAt,
+    });
 
-      return this.occurrencesParser.parse(createdOccurrence);
-    } catch (error) {
-      throw new Error(error);
-    }
+    return this.occurrencesParser.parse(createdOccurrence);
   };
 };

@@ -9,7 +9,7 @@ interface OccurrencesAttributes{
   id: number;
   description: string;
   code: string;
-  registeredAt: string;
+  registeredAt: Date;
 }
 
 type OccurrencesCreationAttributes = Optional<OccurrencesAttributes, 'id'>;
@@ -21,7 +21,7 @@ export class Occurrences extends Model<
   id!: number;
   description!: string;
   code!: string;
-  registeredAt!: string;
+  registeredAt!: Date;
 }
 
 export const init = (sequelize: Sequelize): void => {

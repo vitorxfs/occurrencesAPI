@@ -2,14 +2,14 @@ export interface OccurrencesAttributes{
   id?: number;
   description: string;
   code: string;
-  registeredAt: string;
+  registeredAt: Date;
 }
 
 export class Occurrences implements OccurrencesAttributes {
   id?: number;
   description: string;
   code: string;
-  registeredAt: string;
+  registeredAt: Date;
 
   constructor(attributes: OccurrencesAttributes) {
     this.id = attributes.id;

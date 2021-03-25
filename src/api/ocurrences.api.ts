@@ -1,6 +1,7 @@
 import { AppRequest, AppRouter } from '@enviabybus/utility-belt';
 import express from 'express';
 import Joi from 'joi';
+
 import { getOccurrencesService } from '../initializers';
 
 export const OccurrencesApi = () => {
@@ -16,7 +17,7 @@ export const OccurrencesApi = () => {
         body: Joi.object({
           description: Joi.string().required(),
           code: Joi.string().required(),
-          registeredAt: Joi.string().required(),
+          registeredAt: Joi.date().iso().required(),
         }),
       },
       responseSchema: {
@@ -24,7 +25,7 @@ export const OccurrencesApi = () => {
           id: Joi.number().required(),
           description: Joi.string().required(),
           code: Joi.string().required(),
-          registeredAt: Joi.string().required(),
+          registeredAt: Joi.date().iso().required(),
         }).description('Created'),
       },
       summary: 'Criação de Ocorrência',

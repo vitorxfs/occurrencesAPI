@@ -1,12 +1,20 @@
 import { Sequelize } from 'sequelize';
 
+import {
+  DB_DIALECT,
+  DB_HOST,
+  DB_NAME,
+  DB_PASS,
+  DB_USER,
+} from '../../env.js';
+
 const sequelize = new Sequelize(
-  process.env.DB_NAME,
-  process.env.DB_USER,
-  process.env.DB_PASS,
+  DB_NAME,
+  DB_USER,
+  DB_PASS,
   {
-    host: process.env.DB_HOST,
-    dialect: process.env.DB_DIALECT,
+    host: DB_HOST,
+    dialect: DB_DIALECT,
   },
 );
 

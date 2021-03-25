@@ -25,6 +25,6 @@ module.exports = {
   },
 
   down: async (queryInterface: QueryInterface): Promise<void> => {
-    await queryInterface.dropTable('clientes');
+    await queryInterface.dropTable('Occurrences');
   },
 };

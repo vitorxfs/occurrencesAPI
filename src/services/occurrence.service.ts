@@ -15,16 +15,13 @@ export class OccurrencesService {
   async create({ description, code, registeredAt }: {
     description: string,
     code: string,
-    registeredAt: string,
+    registeredAt: Date,
   }): Promise<Occurrences> {
     try {
-      // Transforma a data em registeredAt em ISO String
-      const registeredAtDate = new Date(registeredAt).toISOString();
-
       return await this.occurrencesRepository.create({
         description,
         code,
-        registeredAt: registeredAtDate,
+        registeredAt,
       });
     } catch (error) {
       throw new Error(error);
