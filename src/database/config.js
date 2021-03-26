@@ -10,15 +10,21 @@ import {
 const dotenv = require('dotenv');
 dotenv.config();
 
+const dbEnvironmentConfig = {
+  username: DB_USER,
+  password: DB_PASS,
+  database: DB_NAME,
+  host: DB_HOST,
+  port: DB_PORT,
+  dialect: DB_DIALECT,
+  seederStorage: 'sequelize',
+};
+
 const config = {
-  development: {
-    username: DB_USER,
-    password: DB_PASS,
-    database: DB_NAME,
-    host: DB_HOST,
-    port: DB_PORT,
-    dialect: DB_DIALECT,
-  },
+  development: dbEnvironmentConfig,
+  homolog: dbEnvironmentConfig,
+  production: dbEnvironmentConfig,
 };
 
 export default config;
+module.exports = config;

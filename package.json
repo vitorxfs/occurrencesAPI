@@ -6,7 +6,7 @@
   "scripts": {
     "build": "tsc",
     "db:drop": "npm run sequelize db:drop",
-    "db:migrate": "npm run sequelize db:migrate",
+    "db:migrate": "(npm run sequelize db:create || exit 0) && npm run sequelize db:migrate",
     "db:rollback-specific": "npm run sequelize db:migrate:undo:all --to",
     "db:rollback": "npm run sequelize db:migrate:undo",
     "db:seed": "npm run sequelize db:seed:all",
