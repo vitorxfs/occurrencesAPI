@@ -4,13 +4,27 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "dev": "nodemon --exec node --inspect=0.0.0.0 -r sucrase/register ./src/server.ts"
+    "build": "tsc",
+    "db:drop": "npm run sequelize db:drop",
+    "db:migrate": "(npm run sequelize db:create || exit 0) && npm run sequelize db:migrate",
+    "db:rollback-specific": "npm run sequelize db:migrate:undo:all --to",
+    "db:rollback": "npm run sequelize db:migrate:undo",
+    "db:seed": "npm run sequelize db:seed:all",
+    "dev": "nodemon --exec node --inspect=0.0.0.0 -r sucrase/register ./src/server.ts",
+    "sequelize": "./bin/sequelize"
   },
   "dependencies": {
     "@enviabybus/utility-belt": "^1.9.16",
     "@types/express": "^4.17.11",
+    "@types/sequelize": "^4.28.9",
     "body-parser": "^1.19.0",
-    "dotenv": "^8.2.0"
+    "dotenv": "^8.2.0",
+    "joi": "^17.4.0",
+    "mysql2": "^2.2.5",
+    "pg": "^8.5.1",
+    "pg-hstore": "^2.3.3",
+    "sequelize": "^6.6.2",
+    "sequelize-cli": "^6.2.0"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^4.18.0",
