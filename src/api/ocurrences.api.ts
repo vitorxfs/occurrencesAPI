@@ -1,6 +1,7 @@
 import { AppRequest, AppRouter } from '@enviabybus/utility-belt';
 import express from 'express';
 import Joi from 'joi';
+import { UserAuthenticatorMiddleware } from '../authenticators/authenticator';
 
 import { getOccurrencesService } from '../initializers';
 
@@ -13,6 +14,7 @@ export const OccurrencesApi = () => {
     ROUTE,
     {
       auth: null,
+      middlewares: [UserAuthenticatorMiddleware()],
       requestSchema: {
         body: Joi.object({
           description: Joi.string().required(),

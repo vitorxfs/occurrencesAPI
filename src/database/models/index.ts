@@ -5,8 +5,12 @@ import {
   DB_HOST,
   DB_NAME,
   DB_PASS,
+  DB_PORT,
   DB_USER,
 } from '../../env.js';
+
+const dotenv = require('dotenv');
+dotenv.config();
 
 const sequelize = new Sequelize(
   DB_NAME,
@@ -14,7 +18,8 @@ const sequelize = new Sequelize(
   DB_PASS,
   {
     host: DB_HOST,
-    dialect: DB_DIALECT,
+    port: DB_PORT,
+    dialect: DB_DIALECT as any,
   },
 );
 
