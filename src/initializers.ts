@@ -8,24 +8,24 @@ import {
 } from '@enviabybus/utility-belt';
 
 import { GANDALF_HOST } from './env';
-import { OccurrencesParser } from './database/parser/occurrences.parser';
-import { OccurrencesRepository } from './repositories/occurrences.repository';
-import { OccurrencesService } from './services/occurrence.service';
+import { OccurrenceParser } from './database/parser/occurrences.parser';
+import { OccurrenceRepository } from './repositories/occurrences.repository';
+import { OccurrenceService } from './services/occurrence.service';
 import { UserAuthenticator } from './authenticators/authenticator';
 
-export function getOccurrencesParser() {
-  return new OccurrencesParser();
+export function getOccurrenceParser() {
+  return new OccurrenceParser();
 }
 
-export function getOccurrencesRepository() {
-  return new OccurrencesRepository({
-    occurrencesParser: getOccurrencesParser(),
+export function getOccurrenceRepository() {
+  return new OccurrenceRepository({
+    occurrenceParser: getOccurrenceParser(),
   });
 }
 
-export function getOccurrencesService() {
-  return new OccurrencesService({
-    occurrencesRepository: getOccurrencesRepository(),
+export function getOccurrenceService() {
+  return new OccurrenceService({
+    occurrenceRepository: getOccurrenceRepository(),
   });
 }
 

@@ -1,24 +1,24 @@
-import { Occurrences } from '../models/occurrences.model';
-import { OccurrencesRepository } from '../repositories/occurrences.repository';
+import { Occurrence } from '../models/occurrences.model';
+import { OccurrenceRepository } from '../repositories/occurrences.repository';
 
-interface OccurrencesServiceOpt {
-  occurrencesRepository: OccurrencesRepository;
+interface OccurrenceServiceDependencies {
+  occurrenceRepository: OccurrenceRepository;
 }
 
-export class OccurrencesService {
-  occurrencesRepository!: OccurrencesRepository;
+export class OccurrenceService {
+  occurrenceRepository!: OccurrenceRepository;
 
-  constructor({ occurrencesRepository }: OccurrencesServiceOpt) {
-    this.occurrencesRepository = occurrencesRepository;
+  constructor({ occurrenceRepository }: OccurrenceServiceDependencies) {
+    this.occurrenceRepository = occurrenceRepository;
   }
 
   async create({ description, code, registeredAt }: {
     description: string,
     code: string,
     registeredAt: Date,
-  }): Promise<Occurrences> {
+  }): Promise<Occurrence> {
     try {
-      return await this.occurrencesRepository.create({
+      return await this.occurrenceRepository.create({
         description,
         code,
         registeredAt,
@@ -28,11 +28,15 @@ export class OccurrencesService {
     }
   }
 
-  async list(): Promise<Occurrences[]> {
+  async list(): Promise<Occurrence[]> {
     try {
-      return await this.occurrencesRepository.list();
+      return await this.occurrenceRepository.list();
     } catch (error) {
       throw new Error(error);
     }
+  }
+
+  async findById(id: number): Promise<Occurrence> {
+    return this.occurrenceRepository.findById(id);
   }
 }

@@ -5,19 +5,19 @@ import {
   Sequelize,
 } from 'sequelize';
 
-interface OccurrencesAttributes{
+interface OccurrenceAttributes{
   id: number;
   description: string;
   code: string;
   registeredAt: Date;
 }
 
-type OccurrencesCreationAttributes = Optional<OccurrencesAttributes, 'id'>;
+type OccurrenceCreationAttributes = Optional<OccurrenceAttributes, 'id'>;
 
-export class Occurrences extends Model<
-  OccurrencesAttributes,
-  OccurrencesCreationAttributes
-> implements OccurrencesAttributes {
+export class Occurrence extends Model<
+  OccurrenceAttributes,
+  OccurrenceCreationAttributes
+> implements OccurrenceAttributes {
   id!: number;
   description!: string;
   code!: string;
@@ -25,7 +25,7 @@ export class Occurrences extends Model<
 }
 
 export const init = (sequelize: Sequelize): void => {
-  Occurrences.init({
+  Occurrence.init({
     id: {
       allowNull: false,
       autoIncrement: true,
@@ -47,4 +47,4 @@ export const init = (sequelize: Sequelize): void => {
   }, { sequelize, tableName: 'Occurrences', timestamps: false });
 };
 
-export default Occurrences;
+export default Occurrence;
