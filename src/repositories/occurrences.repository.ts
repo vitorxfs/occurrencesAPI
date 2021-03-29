@@ -28,4 +28,9 @@ export class OccurrencesRepository {
 
     return this.occurrencesParser.parse(createdOccurrence);
   };
+
+  async list(): Promise<Occurrences[]> {
+    const occurrences = await OccurrencesDbModel.findAll();
+    return occurrences.map(occurrence => this.occurrencesParser.parse(occurrence));
+  }
 };

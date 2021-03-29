@@ -43,7 +43,33 @@ export const OccurrencesApi = () => {
 
         res.status(201).json(result);
       } catch (error) {
-        throw new Error(error);
+        res.status(500).send('Internal Server Error');
+      }
+    },
+  );
+
+  // GET /occurrences
+  appRouter.get(
+    ROUTE,
+    {
+      auth: userAuthenticator,
+      responseSchema: {
+        200: Joi.array().items({
+          id: Joi.number().required(),
+          description: Joi.string().required(),
+          code: Joi.string().required(),
+          registeredAt: Joi.date().iso().required(),
+        }),
+      },
+      summary: 'Listagem de Ocorrências',
+    },
+    async (req: AppRequest, res): Promise<void> => {
+      const occurrencesService = getOccurrencesService();
+      try {
+        const result = await occurrencesService.list();
+        res.json(result);
+      } catch (error) {
+        res.status(500).send('Internal Server Error');
       }
     },
   );

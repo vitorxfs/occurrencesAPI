@@ -27,4 +27,12 @@ export class OccurrencesService {
       throw new Error(error);
     }
   }
+
+  async list(): Promise<Occurrences[]> {
+    try {
+      return await this.occurrencesRepository.list();
+    } catch (error) {
+      throw new Error(error);
+    }
+  }
 }
