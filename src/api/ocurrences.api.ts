@@ -2,7 +2,7 @@ import { AppRequest, AppRouter } from '@enviabybus/utility-belt';
 import express from 'express';
 import Joi from 'joi';
 
-import { getOccurrenceService, getUserAuthenticator } from '../initializers';
+import { getApiErrorHandler, getLogger, getOccurrenceService, getUserAuthenticator } from '../initializers';
 import { OccurrenceNotFoundError } from '../errors/occurrences.error';
 
 export const OccurrencesApi = () => {
@@ -38,13 +38,15 @@ export const OccurrencesApi = () => {
         code,
         registeredAt,
       } = req.body;
+      const logger = getLogger();
+      const apiErrorHandler = getApiErrorHandler({ logger });
       const occurrenceService = getOccurrenceService();
       try {
         const result = await occurrenceService.create({ description, code, registeredAt });
 
         res.status(201).json(result);
       } catch (error) {
-        res.status(500).send({ message: 'Internal Server Error' });
+        apiErrorHandler.handle(error, res);
       }
     },
   );
@@ -65,12 +67,14 @@ export const OccurrencesApi = () => {
       summary: 'Listagem de Ocorrências',
     },
     async (req: AppRequest, res): Promise<void> => {
+      const logger = getLogger();
+      const apiErrorHandler = getApiErrorHandler({ logger });
       const occurrenceService = getOccurrenceService();
       try {
         const result = await occurrenceService.list();
         res.json(result);
       } catch (error) {
-        res.status(500).json({ message: 'Internal Server Error' });
+        apiErrorHandler.handle(error, res);
       }
     },
   );
@@ -92,17 +96,62 @@ export const OccurrencesApi = () => {
     },
     async (req: AppRequest, res) => {
       const id = req.params.id;
+      const logger = getLogger();
+      const apiErrorHandler = getApiErrorHandler({ logger });
       const occurrenceService = getOccurrenceService();
       try {
         const result = await occurrenceService.findById(Number(id));
         res.json(result);
       } catch (error) {
         if (error instanceof OccurrenceNotFoundError) {
-          res.status(404).json({ message: error.message });
+          apiErrorHandler.handle(error, res, 404);
+        } else {
+          apiErrorHandler.handle(error, res);
         }
-        res.status(500).json({ message: 'Internal Server Error' });
       }
     },
   );
+
+  // PATCH /occurrences/:id
+  appRouter.patch(
+    `${ROUTE}/:id`,
+    {
+      auth: userAuthenticator,
+      requestSchema: {
+        body: Joi.object({
+          description: Joi.string(),
+          code: Joi.string(),
+          registeredAt: Joi.date().iso(),
+        }).min(1),
+      },
+      summary: 'Atualização de Ocorrência',
+    },
+    async (req: AppRequest, res) => {
+      const id = req.params.id;
+      const {
+        description,
+        code,
+        registeredAt,
+      } = req.body;
+      const logger = getLogger();
+      const apiErrorHandler = getApiErrorHandler({ logger });
+      const occurrenceService = getOccurrenceService();
+      try {
+        await occurrenceService.update(+id, {
+          description,
+          code,
+          registeredAt,
+        });
+        res.sendStatus(204);
+      } catch (error) {
+        if (error instanceof OccurrenceNotFoundError) {
+          apiErrorHandler.handle(error, res, 404);
+        } else {
+          apiErrorHandler.handle(error, res);
+        }
+      }
+    },
+  );
+
   return appRouter;
 };

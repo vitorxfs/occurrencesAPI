@@ -1,4 +1,5 @@
 import { EmptyResultError } from 'sequelize';
+import { isNil, omitBy } from 'lodash';
 
 import { Occurrence, OccurrenceAttributes } from '../models/occurrences.model';
 import { Occurrence as OccurrenceDbModel } from '../database/models/occurrences';
@@ -52,5 +53,26 @@ export class OccurrenceRepository {
 
       throw error;
     }
+  }
+
+  async update(id: number, {
+    description,
+    code,
+    registeredAt,
+  }: {
+    description?: string,
+    code?: string,
+    registeredAt?: Date,
+  }): Promise<boolean> {
+    const attributes = omitBy({
+      description,
+      code,
+      registeredAt,
+    }, isNil);
+    const updatedOccurrence = await OccurrenceDbModel.update(attributes, { where: { id } });
+    if (updatedOccurrence[0] === 0) {
+      throw new OccurrenceNotFoundError('id', id.toString());
+    }
+    return true;
   }
 };

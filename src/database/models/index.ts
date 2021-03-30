@@ -29,7 +29,7 @@ function sequelizeInit(sequelize: Sequelize) {
   Occurrences.init(sequelize);
 }
 
-export { Occurrences } from './occurrences';
+export { Occurrence } from './occurrences';
 
 export {
   sequelize,

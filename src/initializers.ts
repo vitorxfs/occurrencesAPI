@@ -1,4 +1,5 @@
 import {
+  ApiErrorHandler,
   GandalfClient,
   HttpClient, HttpClientAdapter,
   HttpClientSuperAgentAdapter,
@@ -13,19 +14,17 @@ import { OccurrenceRepository } from './repositories/occurrences.repository';
 import { OccurrenceService } from './services/occurrence.service';
 import { UserAuthenticator } from './authenticators/authenticator';
 
-export function getOccurrenceParser() {
-  return new OccurrenceParser();
+export function getApiErrorHandler({ logger }: { logger: Logger }): ApiErrorHandler {
+  return new ApiErrorHandler({ logger });
 }
 
-export function getOccurrenceRepository() {
-  return new OccurrenceRepository({
-    occurrenceParser: getOccurrenceParser(),
-  });
-}
+export function getGandalfClient() {
+  const logger = getLogger();
+  const httpClientAdapter = getHttpClientAdapter();
 
-export function getOccurrenceService() {
-  return new OccurrenceService({
-    occurrenceRepository: getOccurrenceRepository(),
+  return new GandalfClient({
+    host: GANDALF_HOST,
+    httpClient: getHttpClient({ logger, httpClientAdapter }),
   });
 }
 
@@ -60,13 +59,19 @@ export function getLogger(): Logger {
   return new Logger({ adapter: loggerAdapter });
 }
 
-export function getGandalfClient() {
-  const logger = getLogger();
-  const httpClientAdapter = getHttpClientAdapter();
+export function getOccurrenceParser() {
+  return new OccurrenceParser();
+}
 
-  return new GandalfClient({
-    host: GANDALF_HOST,
-    httpClient: getHttpClient({ logger, httpClientAdapter }),
+export function getOccurrenceRepository() {
+  return new OccurrenceRepository({
+    occurrenceParser: getOccurrenceParser(),
+  });
+}
+
+export function getOccurrenceService() {
+  return new OccurrenceService({
+    occurrenceRepository: getOccurrenceRepository(),
   });
 }
 

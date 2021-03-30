@@ -39,4 +39,16 @@ export class OccurrenceService {
   async findById(id: number): Promise<Occurrence> {
     return this.occurrenceRepository.findById(id);
   }
+
+  async update(id: number, {
+    description,
+    code,
+    registeredAt,
+  }: Occurrence): Promise<boolean> {
+    return await this.occurrenceRepository.update(id, {
+      description,
+      code,
+      registeredAt,
+    });
+  }
 }
