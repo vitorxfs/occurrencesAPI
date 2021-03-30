@@ -3,7 +3,7 @@ import express from 'express';
 import Joi from 'joi';
 
 import { getApiErrorHandler, getLogger, getOccurrenceService, getUserAuthenticator } from '../initializers';
-import { OccurrenceNotFoundError } from '../errors/occurrences.error';
+import { OccurrenceRepositoryNotFoundError } from '../errors/repositories/occurrences-repository.error';
 
 export const OccurrencesApi = () => {
   const appRouter = new AppRouter(express.Router());
@@ -103,7 +103,7 @@ export const OccurrencesApi = () => {
         const result = await occurrenceService.findById(Number(id));
         res.json(result);
       } catch (error) {
-        if (error instanceof OccurrenceNotFoundError) {
+        if (error instanceof OccurrenceRepositoryNotFoundError) {
           apiErrorHandler.handle(error, res, 404);
         } else {
           apiErrorHandler.handle(error, res);
@@ -144,7 +144,32 @@ export const OccurrencesApi = () => {
         });
         res.sendStatus(204);
       } catch (error) {
-        if (error instanceof OccurrenceNotFoundError) {
+        if (error instanceof OccurrenceRepositoryNotFoundError) {
+          apiErrorHandler.handle(error, res, 404);
+        } else {
+          apiErrorHandler.handle(error, res);
+        }
+      }
+    },
+  );
+
+  // DELETE /occurrences/:id
+  appRouter.delete(
+    `${ROUTE}/:id`,
+    {
+      auth: userAuthenticator,
+      summary: 'Deleção de Ocorrência',
+    },
+    async (req: AppRequest, res) => {
+      const id = req.params.id;
+      const logger = getLogger();
+      const apiErrorHandler = getApiErrorHandler({ logger });
+      const occurrenceService = getOccurrenceService();
+      try {
+        await occurrenceService.destroy(+id);
+        res.status(204).end();
+      } catch (error) {
+        if (error instanceof OccurrenceRepositoryNotFoundError) {
           apiErrorHandler.handle(error, res, 404);
         } else {
           apiErrorHandler.handle(error, res);

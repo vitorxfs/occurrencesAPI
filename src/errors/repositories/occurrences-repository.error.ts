@@ -1,8 +1,8 @@
 import { BaseError } from '@enviabybus/utility-belt';
 
-export class OccurrenceError extends BaseError { }
+export class OccurrenceRepositoryError extends BaseError { }
 
-export class OccurrenceNotFoundError extends OccurrenceError {
+export class OccurrenceRepositoryNotFoundError extends OccurrenceRepositoryError {
   constructor(property: string, value?: string) {
     super({
       code: 'occurrence-not-found',

@@ -3,7 +3,7 @@ import { isNil, omitBy } from 'lodash';
 
 import { Occurrence, OccurrenceAttributes } from '../models/occurrences.model';
 import { Occurrence as OccurrenceDbModel } from '../database/models/occurrences';
-import { OccurrenceNotFoundError } from '../errors/occurrences.error';
+import { OccurrenceRepositoryNotFoundError } from '../errors/repositories/occurrences-repository.error';
 import { OccurrenceParser } from '../database/parser/occurrences.parser';
 
 interface OccurrenceRepositoryDependencies {
@@ -48,7 +48,7 @@ export class OccurrenceRepository {
       return this.occurrenceParser.parse(occurrence);
     } catch (error) {
       if (error instanceof EmptyResultError) {
-        throw new OccurrenceNotFoundError('id', id.toString());
+        throw new OccurrenceRepositoryNotFoundError('id', id.toString());
       }
 
       throw error;
@@ -71,8 +71,15 @@ export class OccurrenceRepository {
     }, isNil);
     const updatedOccurrence = await OccurrenceDbModel.update(attributes, { where: { id } });
     if (updatedOccurrence[0] === 0) {
-      throw new OccurrenceNotFoundError('id', id.toString());
+      throw new OccurrenceRepositoryNotFoundError('id', id.toString());
     }
     return true;
+  }
+
+  async destroy(id: number): Promise<void> {
+    const numberDeletedOccurrences = await OccurrenceDbModel.destroy({ where: { id } });
+    if (numberDeletedOccurrences === 0) {
+      throw new OccurrenceRepositoryNotFoundError('id', id.toString());
+    }
   }
 };

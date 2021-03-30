@@ -51,4 +51,8 @@ export class OccurrenceService {
       registeredAt,
     });
   }
+
+  async destroy(id: number) {
+    return await this.occurrenceRepository.destroy(id);
+  }
 }
