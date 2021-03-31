@@ -3,16 +3,19 @@ import express from 'express';
 
 import { configAfterMiddlewares, configBeforeMiddlewares } from './config/middlewares';
 import configRoutes from './config/routes';
-import { getApiErrorHandler, getLogger } from './initializers';
+import { getApiErrorHandler, getLogger, getLoggerAdapter } from './initializers';
 import { sequelize, sequelizeInit } from './database/models';
 
-const logger = getLogger();
+export const logger = getLogger();
 const errorHandler = getApiErrorHandler({ logger });
 sequelizeInit(sequelize);
 
 const app = new Application({ express: express(), name: 'ocurrences-api' });
 
-configBeforeMiddlewares(app);
+configBeforeMiddlewares({
+  app,
+  loggerAdapter: getLoggerAdapter(),
+});
 configRoutes(app, { apiContext: '/api/' });
 configAfterMiddlewares({ app, errorHandler });
 

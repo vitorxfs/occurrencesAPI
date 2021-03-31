@@ -1,8 +1,12 @@
-import { ApiErrorHandler, Application } from '@enviabybus/utility-belt';
+import { ApiErrorHandler, Application, LoggerAdapter, LoggerMiddleware } from '@enviabybus/utility-belt';
 import express, { Response } from 'express';
 
-export const configBeforeMiddlewares = (app: Application): void => {
+export const configBeforeMiddlewares = ({ app, loggerAdapter }: {
+  app: Application,
+  loggerAdapter: LoggerAdapter,
+}): void => {
   app.use(express.json());
+  app.use(LoggerMiddleware(loggerAdapter));
 };
 
 export const configAfterMiddlewares = ({

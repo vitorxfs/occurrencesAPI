@@ -33,8 +33,13 @@ export class OccurrenceRepository {
     return this.occurrenceParser.parse(createdOccurrence);
   };
 
-  async list(): Promise<Occurrence[]> {
-    const occurrences = await OccurrenceDbModel.findAll();
+  async list({ limit, offset }: { limit?: number, offset?: number }): Promise<Occurrence[]> {
+    const options = {} as any;
+
+    if (limit) { options.limit = limit; }
+    if (offset) { options.offset = offset; }
+
+    const occurrences = await OccurrenceDbModel.findAll(options);
     return occurrences.map(occurrence => this.occurrenceParser.parse(occurrence));
   }
 

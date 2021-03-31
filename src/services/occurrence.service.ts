@@ -28,9 +28,9 @@ export class OccurrenceService {
     }
   }
 
-  async list(): Promise<Occurrence[]> {
+  async list({ limit, offset }: { limit?: number, offset?: number }): Promise<Occurrence[]> {
     try {
-      return await this.occurrenceRepository.list();
+      return await this.occurrenceRepository.list({ limit, offset });
     } catch (error) {
       throw new Error(error);
     }

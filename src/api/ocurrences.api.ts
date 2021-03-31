@@ -56,6 +56,12 @@ export const OccurrencesApi = () => {
     ROUTE,
     {
       auth: userAuthenticator,
+      requestSchema: {
+        query: Joi.object({
+          limit: Joi.number(),
+          offset: Joi.number(),
+        }),
+      },
       responseSchema: {
         200: Joi.array().items({
           id: Joi.number().required(),
@@ -70,8 +76,12 @@ export const OccurrencesApi = () => {
       const logger = getLogger();
       const apiErrorHandler = getApiErrorHandler({ logger });
       const occurrenceService = getOccurrenceService();
+      const { limit, offset } = req.query;
       try {
-        const result = await occurrenceService.list();
+        const result = await occurrenceService.list({
+          limit: limit ? Number(limit) : undefined,
+          offset: offset ? Number(offset) : 0,
+        });
         res.json(result);
       } catch (error) {
         apiErrorHandler.handle(error, res);
